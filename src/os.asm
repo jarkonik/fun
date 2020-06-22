@@ -24,7 +24,7 @@ print_welcome:
 	mov ah, 0x0e
 
 .loop:
-	lodsb 
+	lodsb
 
 	cmp al, 0
 	je .done
@@ -64,7 +64,7 @@ DATA_SEG equ gdt_data - gdt_start
 
 bits 32
 boot32:
-	
+
 
 ; Fill remaining bytes to 512 border
 	times 510-($-$$) db 0
