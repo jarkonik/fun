@@ -31,7 +31,7 @@ print_welcome:
 
 	int 0x10
 	jmp .loop
-.done
+.done:
 	ret
 
 

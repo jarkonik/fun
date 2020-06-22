@@ -1,5 +1,5 @@
 SOURCES := src/os.asm
-AS = yasm
+AS = nasm
 
 .PHONY : all clean run
 
