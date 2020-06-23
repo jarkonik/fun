@@ -7,7 +7,7 @@ start:
 %include "src/write_string.asm"
 
 data:
-.welcomeString: db "Welcome to koniOS! Starting boot process...", 0
+.welcomeString: db "Welcome to funOS! Starting boot process...", 0
 
 boot:
     mWriteString data.welcomeString

@@ -1,10 +1,17 @@
 SOURCES=$(wildcard src/*.asm)
 AS=nasm
 ASFLAGS=-f bin
+MKDIR_P=mkdir -p
+OUT_DIR=bin
 
-.PHONY: all clean run
+.PHONY: all clean run directories
 
-all: bin/os.bin
+all: directories bin/os.bin
+
+directories: ${OUT_DIR}
+
+${OUT_DIR}:
+	${MKDIR_P} ${OUT_DIR}
 
 run: all run
 
