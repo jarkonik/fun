@@ -1,57 +1,63 @@
 bits 16
 org 0x7c00
 
-    jmp boot
-
-%include "src/write_string.asm"
-
-gdtinfo:
-    dw gdt_end - gdt - 1
-    dd gdt
-gdt:
-    dd 0, 0
-flatdesc:
-    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
-gdt_end:
-
-welcomeString: db "Welcome to funOS! Starting boot process...", 0
-
 boot:
-    mov ax, 0x3
-    int 0x10
+	mov ax, 0x2401
+	int 0x15
+	mov ax, 0x3
+	int 0x10
+	cli
+	lgdt [gdt_pointer]
+	mov eax, cr0
+	or eax,0x1
+	mov cr0, eax
+	jmp CODE_SEG:boot2
+gdt_start:
+	dq 0x0
+gdt_code:
+	dw 0xFFFF
+	dw 0x0
+	db 0x0
+	db 10011010b
+	db 11001111b
+	db 0x0
+gdt_data:
+	dw 0xFFFF
+	dw 0x0
+	db 0x0
+	db 10010010b
+	db 11001111b
+	db 0x0
+gdt_end:
+gdt_pointer:
+	dw gdt_end - gdt_start
+	dd gdt_start
 
-    mWriteString welcomeString
-
-    ; disable a20 line
-    in al, 0x92
-    or al, 2
-    out 0x92, al
-
-    xor ax, ax   ; make it zero
-    mov ds, ax   ; DS=0
-    mov ss, ax   ; stack starts at 0
-    mov sp, 0x9c00   ; 2000h past code start
-
-    cli      ; no interrupt
-    lgdt [gdtinfo]   ; load gdt register
-    mov  eax, cr0   ; switch to pmode by
-    or al, 1         ; set pmode bit
-    mov  cr0, eax
-
-    mov  bx, 0x08   ; select descriptor 1
-    mov  ds, bx   ; 8h = 1000b
-
-    jmp boot32
+CODE_SEG equ gdt_code - gdt_start
+DATA_SEG equ gdt_data - gdt_start
 
 bits 32
+boot2:
+	mov ax, DATA_SEG
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+	mov esi,hello
+	mov ebx,0xb8000
+.loop:
+	lodsb
+	or al,al
+	jz halt
+	or eax,0x0100
+	mov word [ebx], ax
+	add ebx,2
+	jmp .loop
+halt:
+	cli
+	hlt
+hello: db "Hello world!",0
 
-boot32:
-    mov bx, 0x0f01   ; attrib/char of smiley
-    mov eax, 0x0b8000 ; note 32 bit offset
-    mov word [ds:eax], bx
-
-    jmp boot32
-
-    ; Fill remaining bytes to 512 border
-    times 510-($-$$) db 0
-    dw 0xaa55
+times 510 - ($-$$) db 0
+dw 0xaa55
