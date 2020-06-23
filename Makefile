@@ -13,14 +13,13 @@ directories: ${OUT_DIR}
 ${OUT_DIR}:
 	${MKDIR_P} ${OUT_DIR}
 
-run: all run
+run: all
 
 bin/os.bin: $(SOURCES)
 	$(AS) -f bin src/main.asm -o $@
 
 run: bin/os.bin
-	# qemu-system-x86_64 -drive format=raw,file=$<
-	qemu-system-x86_64  $<
+	qemu-system-x86_64 -drive format=raw,file=$<
 
 clean:
 	rm -rf bin/*
