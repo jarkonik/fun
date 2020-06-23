@@ -2,16 +2,24 @@ bits 16
 org 0x7c00
 
 boot:
+	; enable a20
 	mov ax, 0x2401
 	int 0x15
+
+	; vga mode 3
 	mov ax, 0x3
 	int 0x10
+
 	cli
+
 	lgdt [gdt_pointer]
+
 	mov eax, cr0
 	or eax,0x1
 	mov cr0, eax
+
 	jmp CODE_SEG:boot2
+
 gdt_start:
 	dq 0x0
 gdt_code:
@@ -38,26 +46,8 @@ DATA_SEG equ gdt_data - gdt_start
 
 bits 32
 boot2:
-	mov ax, DATA_SEG
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-	mov esi,hello
-	mov ebx,0xb8000
-.loop:
-	lodsb
-	or al,al
-	jz halt
-	or eax,0x0100
-	mov word [ebx], ax
-	add ebx,2
-	jmp .loop
-halt:
-	cli
-	hlt
-hello: db "Hello world!",0
+	mov dword [0xb8000], 0x07690748
+	jmp $
 
 times 510 - ($-$$) db 0
 dw 0xaa55
