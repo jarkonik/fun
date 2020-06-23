@@ -1,7 +1,6 @@
 bits 16
 org 0x7c00
 
-start:
     jmp boot
 
 %include "src/write_string.asm"
