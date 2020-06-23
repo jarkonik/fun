@@ -12,7 +12,8 @@ bin/os.bin: $(SOURCES)
 	$(AS) -f bin src/main.asm -o $@
 
 run: bin/os.bin
-	qemu-system-x86_64 -nographic $<
+	# qemu-system-x86_64 -drive format=raw,file=$<
+	qemu-system-x86_64  $<
 
 clean:
 	rm -rf bin/*
