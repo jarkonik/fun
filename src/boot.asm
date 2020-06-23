@@ -4,13 +4,13 @@ org 0x7c00
 start:
     jmp boot
 
-%include "src/boot/write_string.asm"
+%include "src/write_string.asm"
 
-strings:
-.welcome: db "Welcome to koniOS! Starting boot process...", 0
+data:
+.welcomeString: db "Welcome to koniOS! Starting boot process...", 0
 
 boot:
-    mWriteString strings.welcome
+    mWriteString data.welcomeString
     jmp $
 
 halt:
