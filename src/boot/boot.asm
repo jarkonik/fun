@@ -1,6 +1,6 @@
-section boot
-global boot
+section .boot
 bits 16
+global boot
 
 boot:
 	; enable a20
@@ -19,6 +19,13 @@ boot:
 	mov eax, cr0
 	or eax, 0x1
 	mov cr0, eax
+
+	mov ax, DATA_SEG
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
 
 	jmp CODE_SEG:boot2
 
