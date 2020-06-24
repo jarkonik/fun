@@ -28,7 +28,7 @@ run-qemu: bin/fun.img
 	qemu-system-x86_64 -drive format=raw,file=$<
 
 run-bochs: bin/fun.bin
-	bochs $<
+	bochs -q 
 
 bin/fun.bin: bin/boot.o bin/kernel.o
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
