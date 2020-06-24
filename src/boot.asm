@@ -45,11 +45,11 @@ gdt_pointer:
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
 
-VGA equ 0b
+VGA equ 0xb8000
 
 bits 32
 boot2:
-	mov dword [0xb8000], 0x07690748
+	mov dword [VGA], 0x07690748
 	jmp $
 
 times 510 - ($-$$) db 0
