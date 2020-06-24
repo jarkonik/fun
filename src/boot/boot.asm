@@ -5,59 +5,24 @@ global boot
 	jmp 0:boot
 
 %include "src/boot/write_string.asm"
+%include "src/boot/a20.asm"
+%include "src/boot/vga_mode.asm"
+%include "src/boot/gdt.asm"
+%include "src/boot/protected_mode.asm"
+%include "src/boot/segments.asm"
 
 boot:
 	WRITE_STRING welcome_message
-
-	; enable a20
-	mov ax, 0x2401
-	int 0x15
-
-	; vga mode 3
-	mov ax, 0x3
-	int 0x10
+	ENABLE_A20
+	SET_VGA_MODE VGA_TEXT_MODE
 
 	cli
-
 	lgdt [gdt_pointer]
 
-	; enable proteted mode
-	mov eax, cr0
-	or eax, 0x1
-	mov cr0, eax
+	ENABLE_PROTECTED_MODE
+	SET_SEGMENT_REGISTERS DATA_SEG
 
-	mov ax, DATA_SEG
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-
-	jmp CODE_SEG:boot2
-
-gdt_start:
-	dq 0x0
-gdt_code:
-	dw 0xFFFF
-	dw 0x0
-	db 0x0
-	db 10011010b
-	db 11001111b
-	db 0x0
-gdt_data:
-	dw 0xFFFF
-	dw 0x0
-	db 0x0
-	db 10010010b
-	db 11001111b
-	db 0x0
-gdt_end:
-gdt_pointer:
-	dw gdt_end - gdt_start
-	dd gdt_start
-
-CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start
+	jmp CODE_SEG:boot32
 
 VGA equ 0xb8000
 
@@ -65,7 +30,7 @@ welcome_message:
 	db "Welcome to funOS, starting boot process...", 10, 0
 
 bits 32
-boot2:
+boot32:
 	mov dword [VGA], 0x07690748
 	jmp $
 
