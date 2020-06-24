@@ -2,7 +2,13 @@ section .boot
 bits 16
 global boot
 
+	jmp 0:boot
+
+%include "src/boot/write_string.asm"
+
 boot:
+	WRITE_STRING welcome_message
+
 	; enable a20
 	mov ax, 0x2401
 	int 0x15
@@ -54,6 +60,9 @@ CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
 
 VGA equ 0xb8000
+
+welcome_message:
+	db "Welcome to funOS, starting boot process...", 10, 0
 
 bits 32
 boot2:
