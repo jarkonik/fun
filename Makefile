@@ -27,7 +27,7 @@ bin/boot.o: $(BOOT_SOURCES)
 run-qemu: bin/fun.img
 	qemu-system-x86_64 -drive format=raw,file=$<
 
-run-bochs: bin/fun.bin
+run-bochs: bin/fun.img
 	bochs -q 
 
 bin/fun.bin: bin/boot.o bin/kernel.o
