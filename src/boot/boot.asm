@@ -1,5 +1,6 @@
+section boot
+global boot
 bits 16
-org 0x7c00
 
 boot:
 	; enable a20
