@@ -24,12 +24,12 @@ boot:
 
 	jmp CODE_SEG:boot32
 
-VGA equ 0xb8000
-
 welcome_message:
 	db "Welcome to funOS, starting boot process...", 10, 0
 
 bits 32
+VGA equ 0xb8000
+
 boot32:
 	mov dword [VGA], 0x07690748
 	jmp $
