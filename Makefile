@@ -7,7 +7,7 @@ CC=i386-elf-gcc
 ASFLAGS=-f elf32
 MKDIR_P=mkdir -p
 OUT_DIR=bin
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib
+CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic
 
 .PHONY: all clean run-bochs run-qemu directories
 
@@ -34,7 +34,7 @@ bin/fun.bin: bin/boot.o bin/kernel.o
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
 
 bin/fun.img: bin/fun.bin
-	dd bs=512 count=2880 if=/dev/zero of=$@
+	dd bs=128m count=1 if=/dev/zero of=$@
 	dd if=$< of=$@ conv=notrunc
 
 clean:
