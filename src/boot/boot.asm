@@ -48,5 +48,4 @@ VGA equ 0xb8000
 extern main
 
 boot32:
-	mov dword [VGA], 0x07690748
-	; jmp main
+	jmp main
