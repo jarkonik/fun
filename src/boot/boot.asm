@@ -18,7 +18,9 @@ boot:
 	ENABLE_A20
 	SET_VGA_MODE VGA_TEXT_MODE
 
-	mov [disk],dl
+	mov [disk], dl ; disk idx
+
+	; TODO: Move to macro
 	mov ah, 0x2
 	mov al, 1 ; number of sectors to read
 	mov ch, 0 ; cylinder idx
