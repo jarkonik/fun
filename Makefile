@@ -9,7 +9,7 @@ MKDIR_P=mkdir -p
 OUT_DIR=bin
 CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib
 
-.PHONY: all clean run directories
+.PHONY: all clean run-bochs run-qemu directories
 
 all: directories bin/fun.img
 
@@ -28,7 +28,7 @@ run-qemu: bin/fun.img
 	qemu-system-x86_64 -drive format=raw,file=$<
 
 run-bochs: bin/fun.img
-	bochs -q 
+	bochs -q
 
 bin/fun.bin: bin/boot.o bin/kernel.o
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
