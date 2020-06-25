@@ -22,7 +22,7 @@ boot:
 
 	; TODO: Move to macro
 	mov ah, 0x2
-	mov al, 1 ; number of sectors to read
+	mov al, 6 ; number of sectors to read
 	mov ch, 0 ; cylinder idx
 	mov dh, 0 ; head idx
 	mov cl, 2 ; sector idx
@@ -49,4 +49,13 @@ second_sector:
 extern main
 
 boot32:
-	jmp main
+	mov esp, kernel_stack_top
+	call main
+	cli
+	hlt
+
+section .bss
+align 4
+kernel_stack_bottom: equ $
+    resb 16384 ; 16 KB
+kernel_stack_top:
