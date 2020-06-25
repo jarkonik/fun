@@ -30,7 +30,7 @@ run-qemu: bin/fun.img
 run-bochs: bin/fun.img
 	bochs -q
 
-bin/fun.bin: bin/boot.o bin/kernel.o
+bin/fun.bin: bin/boot.o bin/kernel.o linker.ld
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
 
 bin/fun.img: bin/fun.bin
