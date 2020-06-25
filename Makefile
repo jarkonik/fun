@@ -11,7 +11,7 @@ CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic
 
 .PHONY: all clean run-bochs run-qemu directories
 
-all: directories bin/fun.img
+all: directories bin/os.img
 
 directories: ${OUT_DIR}
 
@@ -24,16 +24,16 @@ bin/kernel.o: $(KERNEL_SOURCES)
 bin/boot.o: $(BOOT_SOURCES)
 	$(AS) $(ASFLAGS) src/boot/boot.asm -o $@
 
-run-qemu: bin/fun.img
+run-qemu: bin/os.img
 	qemu-system-x86_64 -drive format=raw,file=$<
 
-run-bochs: bin/fun.img
+run-bochs: bin/os.img
 	bochs -q
 
-bin/fun.bin: bin/boot.o bin/kernel.o linker.ld
+bin/os.bin: bin/boot.o bin/kernel.o linker.ld
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
 
-bin/fun.img: bin/fun.bin
+bin/os.img: bin/os.bin
 	dd bs=512 count=2880 if=/dev/zero of=$@
 	dd if=$< of=$@ conv=notrunc
 

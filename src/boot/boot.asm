@@ -39,7 +39,7 @@ boot:
 	jmp CODE_SEG:boot32
 
 welcome_message:
-	db "Welcome to funOS, starting boot process...", 10, 0
+	db "Starting boot process...", 10, 0
 
 times 510 - ($-$$) db 0
 dw 0xaa55
