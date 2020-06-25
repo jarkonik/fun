@@ -1,7 +1,6 @@
 #include <stdint.h>
-
-#define VGA_ADDR 0xb8000
-#define VGA_WIDTH 90
+#include "kernel.h"
+#include "serial.h"
 
 volatile char *vga = (char *)VGA_ADDR;
 
@@ -28,7 +27,7 @@ void set_cursor_pos(int x, int y)
     outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-void print_string(char *string)
+void print(char *string)
 {
     while (*string != 0)
     {
@@ -39,8 +38,9 @@ void print_string(char *string)
 
 void main()
 {
-    print_string("> Hello, world!");
+    // print("> Hello, world!");
     set_cursor_pos(10, 10);
+    test();
 
     while (1)
     {

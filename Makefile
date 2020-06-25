@@ -40,7 +40,7 @@ run-bochs: ${OUT_DIR}/${OS_IMAGE_FILE}
 	bochs -q
 
 ${OUT_DIR}/os.bin: ${OUT_DIR}/boot.o ${OBJ} linker.ld
-	${CC} -T linker.ld -o $@ $(CFLAGS) ${word 1, $^} $(word 2,$^) -lgcc
+	${CC} -T linker.ld -o $@ $(CFLAGS) ${OUT_DIR}/boot.o ${OBJ} -lgcc
 
 ${OUT_DIR}/${ROOTFS_FILE}:
 	hdiutil create $@ -ov -volname "rootfs" -fs FAT32 -srcfolder ${OUT_DIR}/rootfs
