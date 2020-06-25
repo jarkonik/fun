@@ -34,7 +34,7 @@ bin/fun.bin: bin/boot.o bin/kernel.o
 	i386-elf-gcc -T linker.ld -o $@ $(CFLAGS) bin/boot.o bin/kernel.o -lgcc
 
 bin/fun.img: bin/fun.bin
-	dd bs=128m count=1 if=/dev/zero of=$@
+	dd bs=512 count=2880 if=/dev/zero of=$@
 	dd if=$< of=$@ conv=notrunc
 
 clean:
