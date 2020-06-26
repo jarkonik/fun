@@ -25,3 +25,12 @@ void write_serial(char a)
 
     outb(COM1, a);
 }
+
+void print_serial(char *string)
+{
+    while (*string != 0)
+    {
+        write_serial(*string);
+        string++;
+    }
+}
