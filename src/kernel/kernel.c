@@ -9,6 +9,7 @@ void main()
     int i = 0;
     while (1)
     {
+        write_serial('a');
         print("Iteration: ");
         print(itoa(i, 10));
         print("\n");

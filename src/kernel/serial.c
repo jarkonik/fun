@@ -12,3 +12,16 @@ void init_serial()
     outb(COM1 + 2, 0xC7); // Enable FIFO, clear them, with 14-byte threshold
     outb(COM1 + 4, 0x0B); // IRQs enabled, RTS/DSR set
 }
+
+int is_transmit_empty()
+{
+    return inb(COM1 + 5) & 0x20;
+}
+
+void write_serial(char a)
+{
+    while (is_transmit_empty() == 0)
+        ;
+
+    outb(COM1, a);
+}
