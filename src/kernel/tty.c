@@ -2,8 +2,8 @@
 #include "tty.h"
 #include "io.h"
 
-int cur_x = 0;
-int cur_y = 0;
+static size_t cur_x = 0;
+static size_t cur_y = 0;
 
 void set_cursor_pos(int x, int y)
 {
@@ -17,8 +17,8 @@ void set_cursor_pos(int x, int y)
 
 void scroll_down()
 {
-    volatile char *prev_line = (char *)VGA_ADDR;
-    volatile char *cur_line = prev_line + VGA_WIDTH * 2;
+    volatile uint16_t *prev_line = VGA_ADDR;
+    volatile uint16_t *cur_line = prev_line + VGA_WIDTH * 2;
 
     while (cur_line != VGA_END)
     {
