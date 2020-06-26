@@ -17,18 +17,17 @@ void set_cursor_pos(int x, int y)
 
 void scroll_down()
 {
-    volatile char *vga = (char *)VGA_ADDR + VGA_WIDTH * 2;
+    volatile char *prev_line = (char *)VGA_ADDR;
+    volatile char *cur_line = prev_line + VGA_WIDTH * 2;
 
-    while (vga != VGA_ADDR + VGA_HEIGHT * VGA_WIDTH * 2)
+    while (cur_line != VGA_END)
     {
-        *(vga - VGA_WIDTH * 2) = *vga;
-        vga++;
+        *(prev_line++) = *(cur_line++);
     }
-    vga -= VGA_WIDTH * 2;
-    while (vga != VGA_ADDR + VGA_HEIGHT * VGA_WIDTH * 2)
+
+    while (prev_line != VGA_END)
     {
-        *vga = 0x0;
-        vga++;
+        *(prev_line++) = 0x0;
     }
 }
 
@@ -66,7 +65,6 @@ char *itoa(int val, int base)
     int i = 30;
 
     for (; val && i; --i, val /= base)
-
         buf[i] = "0123456789abcdef"[val % base];
 
     return &buf[i + 1];
@@ -74,10 +72,12 @@ char *itoa(int val, int base)
 
 void main()
 {
+    init_serial();
+
     int i = 0;
     while (1)
     {
-        print("Hello, world:");
+        print("Iteration: ");
         print(itoa(i, 10));
         print("\n");
         i++;
