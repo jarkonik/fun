@@ -1,6 +1,6 @@
-#include "kernel.h"
 #include "serial.h"
 #include "utils.h"
+#include "io.h"
 
 void init_serial()
 {
