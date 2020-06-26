@@ -16,6 +16,8 @@ _OBJ=kernel.o serial.o utils.o tty.o
 OBJ = $(patsubst %,$(OUT_DIR)/%,$(_OBJ))
 BOOT_SRC_DIR=${SRC_DIR}/boot
 BOOT_ASM_FILE=${BOOT_SRC_DIR}/boot.asm
+LOG_DIR=log
+SERIAL_LOG_FILE=${LOG_DIR}/serial.log
 
 .PHONY: all clean run-bochs run-qemu directories
 
@@ -34,7 +36,10 @@ ${OUT_DIR}/boot.o: $(BOOT_SOURCES) ${OUT_DIR}
 	$(AS) $(ASFLAGS) ${BOOT_ASM_FILE} -o $@
 
 run-qemu: ${OUT_DIR}/${OS_IMAGE_FILE} ${OUT_DIR}/${RAWROOTFS_FILE}
-	qemu-system-x86_64 -drive format=raw,file=${OUT_DIR}/${OS_IMAGE_FILE}
+	qemu-system-x86_64 \
+		-drive format=raw,file=${OUT_DIR}/${OS_IMAGE_FILE} \
+		-chardev stdio,id=char0,mux=on,logfile=${SERIAL_LOG_FILE},signal=off \
+		-serial chardev:char0
 
 run-bochs: ${OUT_DIR}/${OS_IMAGE_FILE}
 	bochs -q
