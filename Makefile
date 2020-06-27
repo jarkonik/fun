@@ -9,7 +9,7 @@ ROOTFS_DIR =${OUT_DIR}/rootfs
 ROOTFS_FILE=rootfs.dmg
 RAWROOTFS_FILE=rootfs.raw
 OS_IMAGE_FILE=os.img
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic -Werror
+CFLAGS=-std=gnu18 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic -Werror -mgeneral-regs-only
 KERNEL_SRC_DIR=${SRC_DIR}/kernel
 DEPS=$(wildcard ${KERNEL_SRC_DIR}/*.h)
 _OBJ=kernel.o serial.o utils.o tty.o idt.o

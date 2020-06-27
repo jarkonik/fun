@@ -3,6 +3,8 @@
 #include "io.h"
 #include "tty.h"
 
+typedef unsigned int uword_t;
+
 char kbd_US[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -192,13 +194,12 @@ static inline void lidt(void *base, uint16_t size)
         : "m"(IDTR));
 }
 
-#define DEFINE_IRQ_HANDLER(irq_idx)                   \
-    static void irq##irq_idx()                        \
-    {                                                 \
-        asm("pusha");                                 \
-        asm("call %0" ::"m"(irq##irq_idx##_handler)); \
-        asm("popa");                                  \
-        asm("iret");                                  \
+struct interrupt_frame;
+
+#define DEFINE_IRQ_HANDLER(irq_idx)                                                                     \
+    __attribute__((interrupt)) void irq##irq_idx(__attribute__((unused)) struct interrupt_frame *frame) \
+    {                                                                                                   \
+        irq##irq_idx##_handler();                                                                       \
     }
 
 static void bind_irq(uint8_t irq, irq_handler_t irq_handler)
@@ -254,24 +255,6 @@ void init_idt()
     BIND_IRQ(13)
     BIND_IRQ(14)
     BIND_IRQ(15)
-
-    // init_irq(0, irq0);
-    // INIT_IRQ(0)
-    // INIT_IRQ(1)
-    // INIT_IRQ(2)
-    // INIT_IRQ(3)
-    // INIT_IRQ(4)
-    // INIT_IRQ(5)
-    // INIT_IRQ(6)
-    // INIT_IRQ(7)
-    // INIT_IRQ(8)
-    // INIT_IRQ(9)
-    // INIT_IRQ(10)
-    // INIT_IRQ(11)
-    // INIT_IRQ(12)
-    // INIT_IRQ(13)
-    // INIT_IRQ(14)
-    // INIT_IRQ(15)
 
     lidt(
         IDT,
