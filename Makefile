@@ -12,7 +12,7 @@ OS_IMAGE_FILE=os.img
 CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic -Werror
 KERNEL_SRC_DIR=${SRC_DIR}/kernel
 DEPS=$(wildcard ${KERNEL_SRC_DIR}/*.h)
-_OBJ=kernel.o serial.o utils.o tty.o
+_OBJ=kernel.o serial.o utils.o tty.o idt.o
 OBJ = $(patsubst %,$(OUT_DIR)/%,$(_OBJ))
 BOOT_SRC_DIR=${SRC_DIR}/boot
 BOOT_ASM_FILE=${BOOT_SRC_DIR}/boot.asm

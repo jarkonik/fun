@@ -1,18 +1,14 @@
 #include "serial.h"
 #include "tty.h"
 #include "utils.h"
+#include "idt.h"
 
 void main()
 {
     init_serial();
+    init_idt();
 
-    int i = 0;
     while (1)
     {
-        print_serial("hello\n");
-        print("Iteration: ");
-        print(itoa(i, 10));
-        print("\n");
-        i++;
     }
 }
