@@ -54,7 +54,6 @@ static void irq1_handler()
     print_serial(string);
 
     outb(0x20, 0x20); //EOI
-    print_serial("ble\n");
 }
 
 static void irq2_handler()
