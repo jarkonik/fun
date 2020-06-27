@@ -3,8 +3,6 @@
 #include "io.h"
 #include "tty.h"
 
-typedef unsigned int uword_t;
-
 char kbd_US[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -194,12 +192,12 @@ static inline void lidt(void *base, uint16_t size)
         : "m"(IDTR));
 }
 
-struct interrupt_frame;
+typedef struct interrupt_frame interrupt_frame_t;
 
-#define DEFINE_IRQ_HANDLER(irq_idx)                                                                     \
-    __attribute__((interrupt)) void irq##irq_idx(__attribute__((unused)) struct interrupt_frame *frame) \
-    {                                                                                                   \
-        irq##irq_idx##_handler();                                                                       \
+#define DEFINE_IRQ_HANDLER(irq_idx)                                                                \
+    __attribute__((interrupt)) void irq##irq_idx(__attribute__((unused)) interrupt_frame_t *frame) \
+    {                                                                                              \
+        irq##irq_idx##_handler();                                                                  \
     }
 
 static void bind_irq(uint8_t irq, irq_handler_t irq_handler)
