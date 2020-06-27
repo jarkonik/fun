@@ -8,6 +8,8 @@ void main()
     init_serial();
     init_idt();
 
+    print("welcome to noOS");
+
     while (1)
     {
     }
