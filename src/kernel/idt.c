@@ -2,6 +2,7 @@
 #include "serial.h"
 #include "io.h"
 #include "tty.h"
+#include "utils.h"
 
 char kbd_US[128] =
     {

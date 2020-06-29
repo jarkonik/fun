@@ -9,10 +9,10 @@ ROOTFS_DIR =${OUT_DIR}/rootfs
 ROOTFS_FILE=rootfs.dmg
 RAWROOTFS_FILE=rootfs.raw
 OS_IMAGE_FILE=os.img
-CFLAGS=-std=gnu18 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic -Werror -mgeneral-regs-only
+CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -nostdlib -pedantic -Werror -mgeneral-regs-only -lgcc
 KERNEL_SRC_DIR=${SRC_DIR}/kernel
 DEPS=$(wildcard ${KERNEL_SRC_DIR}/*.h)
-_OBJ=kernel.o serial.o utils.o tty.o idt.o
+_OBJ=kernel.o serial.o utils.o tty.o idt.o paging.o
 OBJ = $(patsubst %,$(OUT_DIR)/%,$(_OBJ))
 BOOT_SRC_DIR=${SRC_DIR}/boot
 BOOT_ASM_FILE=${BOOT_SRC_DIR}/boot.asm
@@ -41,11 +41,13 @@ run-qemu: ${OUT_DIR}/${OS_IMAGE_FILE} ${OUT_DIR}/${RAWROOTFS_FILE}
 		-chardev stdio,id=char0,mux=on,logfile=${SERIAL_LOG_FILE},signal=off \
 		-serial chardev:char0
 
+${OUT_DIR}/idt.o : CFLAGS+=-mgeneral-regs-only
+
 run-bochs: ${OUT_DIR}/${OS_IMAGE_FILE}
 	bochs -q
 
 ${OUT_DIR}/os.bin: ${OUT_DIR}/boot.o ${OBJ} linker.ld
-	${CC} -T linker.ld -o $@ $(CFLAGS) ${OUT_DIR}/boot.o ${OBJ} -lgcc
+	${CC} -T linker.ld -o $@ $(CFLAGS) ${OUT_DIR}/boot.o ${OBJ}
 
 ${OUT_DIR}/${ROOTFS_FILE}: ${ROOTFS_DIR}
 	hdiutil create $@ -ov -volname "rootfs" -fs FAT32 -srcfolder ${OUT_DIR}/rootfs
