@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "tty.h"
 #include "io.h"
+#include "serial.h"
 
 static size_t cur_x = 0;
 static size_t cur_y = 0;
@@ -18,7 +19,7 @@ void set_cursor_pos(int x, int y)
 void scroll_down()
 {
     volatile uint16_t *prev_line = VGA_ADDR;
-    volatile uint16_t *cur_line = prev_line + VGA_WIDTH * 2;
+    volatile uint16_t *cur_line = prev_line + VGA_WIDTH;
 
     while (cur_line != VGA_END)
     {
@@ -33,12 +34,6 @@ void scroll_down()
 
 void print(char *string)
 {
-    if (cur_y >= VGA_HEIGHT)
-    {
-        scroll_down();
-        cur_y--;
-    }
-
     volatile char *vga = (char *)VGA_ADDR + 2 * cur_x + cur_y * VGA_WIDTH * 2;
 
     while (*string != 0)
@@ -46,7 +41,16 @@ void print(char *string)
         if (*string == 10 || cur_x >= VGA_WIDTH)
         {
             cur_x = 0;
-            cur_y++;
+
+            if (cur_y + 1 >= VGA_HEIGHT)
+            {
+                scroll_down();
+            }
+            else
+            {
+                cur_y++;
+            }
+
             string++;
             continue;
         }
