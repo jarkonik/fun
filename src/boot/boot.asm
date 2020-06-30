@@ -22,7 +22,7 @@ boot:
 
 	; TODO: Move to macro
 	mov ah, 0x2
-	mov al, 6 ; number of sectors to read
+	mov al, 10 ; number of sectors to read
 	mov ch, 0 ; cylinder idx
 	mov dh, 0 ; head idx
 	mov cl, 2 ; sector idx
