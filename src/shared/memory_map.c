@@ -1,5 +1,3 @@
-asm(".code16gcc\n");
-
 #include "memory_map.h"
 #include <stdint.h>
 
