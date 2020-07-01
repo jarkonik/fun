@@ -46,7 +46,7 @@ ${OUT_DIR}/boot.a: ${OUT_DIR} ${OUT_DIR}/boot_main.o ${OUT_DIR}/boot_memory.o
 
 run-qemu: ${OUT_DIR}/${OS_IMAGE_FILE} ${OUT_DIR}/${RAWROOTFS_FILE}
 	qemu-system-x86_64 \
-		-m 1G \
+		-m 128M \
 		-drive format=raw,file=${OUT_DIR}/${OS_IMAGE_FILE} \
 		-chardev stdio,id=char0,mux=on,logfile=${SERIAL_LOG_FILE},signal=off \
 		-serial chardev:char0
