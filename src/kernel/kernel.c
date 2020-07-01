@@ -2,7 +2,6 @@
 #include "tty.h"
 #include "utils.h"
 #include "idt.h"
-#include "memory_map.h"
 
 #ifndef OSNAME
 #define OSNAME "NO_OSNAME_PROVIDED"
@@ -15,8 +14,6 @@ void main()
 
     print(
         "welcome to " OSNAME "\n");
-
-    get_memory_map();
 
     while (1)
     {

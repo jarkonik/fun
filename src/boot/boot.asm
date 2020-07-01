@@ -31,7 +31,13 @@ boot:
 	int 0x13
 
 	cli
+
 	lgdt [gdt_pointer]
+
+	mov esp, kernel_stack_top
+
+	extern read_memory_map
+	call read_memory_map
 
 	ENABLE_PROTECTED_MODE
 	SET_SEGMENT_REGISTERS DATA_SEG
@@ -49,7 +55,6 @@ second_sector:
 extern main
 
 boot32:
-	mov esp, kernel_stack_top
 	call main
 	cli
 	hlt
