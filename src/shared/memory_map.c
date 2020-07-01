@@ -16,7 +16,7 @@ typedef struct SMAP_entry
 } __attribute__((packed)) SMAP_entry_t;
 SMAP_entry_t smap;
 
-void __attribute__((noinline)) __attribute__((regparm(3))) read_memory_map()
+void read_memory_map()
 {
     uint32_t contID = 0;
     uint32_t signature = 0, bytes;
