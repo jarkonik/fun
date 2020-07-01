@@ -1,6 +1,8 @@
 section .boot
 bits 16
 global boot
+global memory_map_start
+global memory_map_end
 
 	jmp 0:boot
 
@@ -55,12 +57,15 @@ second_sector:
 extern main
 
 boot32:
+	mov esp, kernel_stack_top
 	call main
 	cli
 	hlt
 
 section .bss
 align 4
-kernel_stack_bottom: equ $
+kernel_stack_bottom:
     resb 16384 ; 16 KB
 kernel_stack_top:
+memory_map_start: resb 512
+memory_map_end:

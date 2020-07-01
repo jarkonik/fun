@@ -1,9 +1,11 @@
 #include <stdint.h>
 #include "memory_map.h"
 
+extern SMAP_entry_t memory_map_start;
+
 void read_memory_map()
 {
-    SMAP_entry_t *buffer = (SMAP_entry_t *)MEMORY_MAP_ADDR;
+    SMAP_entry_t *buffer = &memory_map_start;
 
     int smap_size = 0x2000;
     int maxentries = smap_size / sizeof(SMAP_entry_t);

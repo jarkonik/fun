@@ -8,6 +8,8 @@
 #define OSNAME "NO_OSNAME_PROVIDED"
 #endif
 
+extern SMAP_entry_t memory_map_start;
+
 void main()
 {
     init_serial();
@@ -16,7 +18,7 @@ void main()
     print(
         "welcome to " OSNAME "\n");
 
-    SMAP_entry_t *buffer = (SMAP_entry_t *)MEMORY_MAP_ADDR;
+    SMAP_entry_t *buffer = &memory_map_start;
     print("Detected memory:\n");
     print(itoa(buffer[0].Length / 1024, 10));
     print("kb\n");

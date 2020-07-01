@@ -1,8 +1,5 @@
 #pragma once
 
-#define MEMORY_MAP_NUMBER_POINTER_ADDR 0x1000
-#define MEMORY_MAP_ADDR 0x1000
-
 typedef struct SMAP_entry
 {
 
