@@ -2,12 +2,14 @@
 #include "memory_map.h"
 
 extern SMAP_entry_t memory_map_start;
+extern SMAP_entry_t memory_map_end;
+extern uint32_t memory_map_entries_count;
 
 void read_memory_map()
 {
     SMAP_entry_t *buffer = &memory_map_start;
 
-    int smap_size = 0x2000;
+    int smap_size = (int)&memory_map_end - (int)&memory_map_start;
     int maxentries = smap_size / sizeof(SMAP_entry_t);
     int contID = 0;
     int entries = 0, signature, bytes;
@@ -26,4 +28,5 @@ void read_memory_map()
         buffer++;
         entries++;
     } while (contID != 0 && entries < maxentries);
+    memory_map_entries_count = entries;
 }

@@ -3,6 +3,7 @@ bits 16
 global boot
 global memory_map_start
 global memory_map_end
+global memory_map_entries_count
 
 	jmp 0:boot
 
@@ -69,3 +70,4 @@ kernel_stack_bottom:
 kernel_stack_top:
 memory_map_start: resb 512
 memory_map_end:
+memory_map_entries_count: resd 1
