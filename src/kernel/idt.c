@@ -78,6 +78,168 @@ static inline void rempap_pic()
     outb(0xA1, 0x0);
 }
 
+static void exception0_handler()
+{
+    print_serial("division by zero");
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception1_handler()
+{
+    print_serial("division by zero");
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception2_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception3_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception4_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception5_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception6_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception7_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception8_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception9_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception10_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception11_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception12_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception13_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception14_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception15_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception16_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception17_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception18_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception19_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception20_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception21_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception22_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception23_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception24_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception25_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception26_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception27_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception28_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception29_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception30_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
+static void exception31_handler()
+{
+    outb(0x20, 0x20); //EOI
+}
+
 static void irq0_handler()
 {
     outb(0x20, 0x20); //EOI
@@ -201,6 +363,12 @@ typedef struct interrupt_frame interrupt_frame_t;
         irq##irq_idx##_handler();                                                                  \
     }
 
+#define DEFINE_EXCEPTION_HANDLER(exception_idx)                                                                \
+    __attribute__((interrupt)) void exception##exception_idx(__attribute__((unused)) interrupt_frame_t *frame) \
+    {                                                                                                          \
+        exception##exception_idx##_handler();                                                                  \
+    }
+
 static void bind_irq(uint8_t irq, irq_handler_t irq_handler)
 {
     irq_handler_u irq_address;
@@ -214,8 +382,24 @@ static void bind_irq(uint8_t irq, irq_handler_t irq_handler)
     IDT[idx].offset_lowerbits = irq_address.u16[0];
 }
 
+static void bind_exception(uint8_t exception, irq_handler_t exception_handler)
+{
+    irq_handler_u irq_address;
+    irq_address.irq_handler = exception_handler;
+
+    uint8_t idx = exception;
+    IDT[idx].offset_lowerbits = irq_address.u16[1];
+    IDT[idx].selector = GDT_SELECTOR;
+    IDT[idx].zero = 0;
+    IDT[idx].type_attr = INTERRUPT_GATE;
+    IDT[idx].offset_lowerbits = irq_address.u16[0];
+}
+
 #define BIND_IRQ(irq_idx) \
     bind_irq(irq_idx, irq##irq_idx);
+
+#define BIND_EXCEPTION(exception_idx) \
+    bind_exception(exception_idx, exception##exception_idx);
 
 DEFINE_IRQ_HANDLER(0)
 DEFINE_IRQ_HANDLER(1)
@@ -234,9 +418,75 @@ DEFINE_IRQ_HANDLER(13)
 DEFINE_IRQ_HANDLER(14)
 DEFINE_IRQ_HANDLER(15)
 
+DEFINE_EXCEPTION_HANDLER(0)
+DEFINE_EXCEPTION_HANDLER(1)
+DEFINE_EXCEPTION_HANDLER(2)
+DEFINE_EXCEPTION_HANDLER(3)
+DEFINE_EXCEPTION_HANDLER(4)
+DEFINE_EXCEPTION_HANDLER(5)
+DEFINE_EXCEPTION_HANDLER(6)
+DEFINE_EXCEPTION_HANDLER(7)
+DEFINE_EXCEPTION_HANDLER(8)
+DEFINE_EXCEPTION_HANDLER(9)
+DEFINE_EXCEPTION_HANDLER(10)
+DEFINE_EXCEPTION_HANDLER(11)
+DEFINE_EXCEPTION_HANDLER(12)
+DEFINE_EXCEPTION_HANDLER(13)
+DEFINE_EXCEPTION_HANDLER(14)
+DEFINE_EXCEPTION_HANDLER(15)
+DEFINE_EXCEPTION_HANDLER(16)
+DEFINE_EXCEPTION_HANDLER(17)
+DEFINE_EXCEPTION_HANDLER(18)
+DEFINE_EXCEPTION_HANDLER(19)
+DEFINE_EXCEPTION_HANDLER(20)
+DEFINE_EXCEPTION_HANDLER(21)
+DEFINE_EXCEPTION_HANDLER(22)
+DEFINE_EXCEPTION_HANDLER(23)
+DEFINE_EXCEPTION_HANDLER(24)
+DEFINE_EXCEPTION_HANDLER(25)
+DEFINE_EXCEPTION_HANDLER(26)
+DEFINE_EXCEPTION_HANDLER(27)
+DEFINE_EXCEPTION_HANDLER(28)
+DEFINE_EXCEPTION_HANDLER(29)
+DEFINE_EXCEPTION_HANDLER(30)
+DEFINE_EXCEPTION_HANDLER(31)
+
 void init_idt()
 {
     rempap_pic();
+
+    BIND_EXCEPTION(0)
+    BIND_EXCEPTION(1)
+    BIND_EXCEPTION(2)
+    BIND_EXCEPTION(3)
+    BIND_EXCEPTION(4)
+    BIND_EXCEPTION(5)
+    BIND_EXCEPTION(6)
+    BIND_EXCEPTION(7)
+    BIND_EXCEPTION(8)
+    BIND_EXCEPTION(9)
+    BIND_EXCEPTION(10)
+    BIND_EXCEPTION(11)
+    BIND_EXCEPTION(12)
+    BIND_EXCEPTION(13)
+    BIND_EXCEPTION(14)
+    BIND_EXCEPTION(15)
+    BIND_EXCEPTION(16)
+    BIND_EXCEPTION(17)
+    BIND_EXCEPTION(18)
+    BIND_EXCEPTION(19)
+    BIND_EXCEPTION(20)
+    BIND_EXCEPTION(21)
+    BIND_EXCEPTION(22)
+    BIND_EXCEPTION(23)
+    BIND_EXCEPTION(24)
+    BIND_EXCEPTION(25)
+    BIND_EXCEPTION(26)
+    BIND_EXCEPTION(27)
+    BIND_EXCEPTION(28)
+    BIND_EXCEPTION(29)
+    BIND_EXCEPTION(30)
+    BIND_EXCEPTION(31)
 
     BIND_IRQ(0)
     BIND_IRQ(1)

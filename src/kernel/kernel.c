@@ -28,6 +28,11 @@ void main()
     print(itoa(total_memory / 1024 / 1024, 10));
     print("MB\n");
 
+    int a = 0;
+    print("Ble");
+    int b = 5 / a;
+    print(itoa(b, 10));
+
     while (1)
     {
     }
